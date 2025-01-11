@@ -6,12 +6,12 @@ import { getFirestore } from "firebase/firestore";
 
 // Your Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyBcJpR3Ez0koZRuSQIm87uFLalGBRpex8M",
-  authDomain: "react-native-auth-80051.firebaseapp.com",
-  projectId: "react-native-auth-80051",
-  storageBucket: "react-native-auth-80051.firebasestorage.app",
-  messagingSenderId: "105474576958",
-  appId: "1:105474576958:web:526f33347839fafbfc776f"
+  apiKey: "AIzaSyDppA0MaGPwTJcG9VGsPgRyFCcyNVnqBmI",
+  authDomain: "crypto-tracker-50f63.firebaseapp.com",
+  projectId: "crypto-tracker-50f63",
+  storageBucket: "crypto-tracker-50f63.firebasestorage.app",
+  messagingSenderId: "521736110065",
+  appId: "1:521736110065:web:26b5e90778357a49a34e50"
 };
 
 // Initialize Firebase
