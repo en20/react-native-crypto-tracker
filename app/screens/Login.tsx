@@ -1,5 +1,6 @@
 import {
   View,
+  Text,
   TextInput,
   ActivityIndicator,
   Button,
@@ -76,11 +77,13 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
-      <KeyboardAvoidingView behavior="padding">
+      <KeyboardAvoidingView behavior="padding" style={styles.innerContainer}>
+        <Text style={styles.title}>CryptoTracker App</Text>
         <TextInput
           value={email}
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor="#aaa"
           autoCapitalize="none"
           onChangeText={(text) => setEmail(text)}
         />
@@ -89,15 +92,16 @@ export default function Login() {
           value={password}
           style={styles.input}
           placeholder="Password"
+          placeholderTextColor="#aaa"
           autoCapitalize="none"
           onChangeText={(text) => setPassword(text)}
         />
         {loading ? (
-          <ActivityIndicator size="large" color="#0000ff" />
+          <ActivityIndicator size="large" color="#6200ee" />
         ) : (
           <View style={styles.buttonContainer}>
-            <Button title="Login" onPress={signIn} />
-            <Button title="Sign Up" onPress={signUp} />
+            <Button title="Login" onPress={signIn} color="#6200ee" />
+            <Button title="Sign Up" onPress={signUp} color="#03dac6" />
           </View>
         )}
       </KeyboardAvoidingView>
@@ -107,21 +111,36 @@ export default function Login() {
 
 const styles = StyleSheet.create({
   container: {
-    marginHorizontal: 20,
     flex: 1,
     justifyContent: "center",
+    alignItems: "center",
+    padding: 20,
+    backgroundColor: "#f5f5f5",
+  },
+  innerContainer: {
+    width: "100%",
+    paddingHorizontal: 20,
+    alignItems: "center",
+  },
+  title: {
+    fontSize: 24,
+    fontWeight: "bold",
+    color: "#6200ee",
+    marginBottom: 30,
   },
   input: {
-    marginVertical: 4,
+    width: "100%",
     height: 50,
+    borderColor: "#ddd",
     borderWidth: 1,
-    borderRadius: 4,
-    padding: 10,
+    borderRadius: 25,
+    marginBottom: 15,
+    paddingHorizontal: 15,
+    fontSize: 16,
     backgroundColor: "#fff",
   },
   buttonContainer: {
-    marginTop: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
+    marginTop: 20,
+    width: "100%",
   },
 });

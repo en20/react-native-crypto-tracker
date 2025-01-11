@@ -19,25 +19,27 @@ socket.on("connect", () => {
   console.log("socket Connected");
 });
 
-type ItemProps = { name: string; price: number };
+type ItemProps = { name: string; price: number | undefined };
 
 const Item = ({ name, price }: ItemProps) => (
   <TouchableOpacity style={styles.item}>
     <View style={styles.itemRow}>
       <Text style={styles.name}>{name}</Text>
-      <Text style={styles.price}>${price.toLocaleString()}</Text>
+      <Text style={styles.price}>
+        ${price ? price.toLocaleString() : "N/A"}
+      </Text>
     </View>
   </TouchableOpacity>
 );
 
 export default function Home() {
-  const [data, setData] = useState<any[]>([]); // Defina o tipo correto se possível
-  const [refreshing, setRefreshing] = useState(false);
+  const [data, setData] = useState<any[]>([]); // Explicit type for the state
 
   useEffect(() => {
     socket.on("crypto", (cryptoData) => {
-      setData(cryptoData);
-      setRefreshing(false); // Termina o "refreshing" assim que os dados são recebidos
+      if (cryptoData && Array.isArray(cryptoData)) {
+        setData(cryptoData);
+      }
     });
   }, []);
 
@@ -47,23 +49,16 @@ export default function Home() {
     );
   };
 
-  const handleRefresh = () => {
-    setRefreshing(true); // Começa a animação de carregamento
-    socket.emit("requestCryptoData"); // Solicita novos dados do backend
-  };
-
   return (
     <SafeAreaProvider>
       <SafeAreaView style={styles.container}>
         <FlatList
-          data={data} // Exibe os dados recebidos pelo socket
+          data={data} // Exibe os dados recebidos pelo socket, ou os dados iniciais
           renderItem={({ item }) => (
             <Item name={item.name} price={item.price} />
           )}
-          keyExtractor={(item) => item.id.toString()}
+          keyExtractor={(item) => item.id.toString()} // Ensure id is a string
           contentContainerStyle={styles.list}
-          refreshing={refreshing}
-          onRefresh={handleRefresh} // Função chamada ao puxar para baixo
         />
         <View style={styles.footer}>
           <Button onPress={handleSignOut} title="Sign Out" color="#ff5c5c" />
