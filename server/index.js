@@ -4,12 +4,17 @@ const socketIO = require('socket.io');
 const https = require('https');
 
 // Inicializa o servidor Express
-const server = express().listen(PORT, () => {
+const server = express().listen(PORT, '0.0.0.0', () => {
     console.log(`Server is running on port ${PORT}`);
 });
 
 // Inicializa o Socket.IO
-const io = socketIO(server);
+const io = socketIO(server, {
+  cors: {
+    origin: "http://192.168.1.70:8081",  // Substitua pelo IP do seu dispositivo de frontend
+    methods: ["GET", "POST"]
+  }
+});
 
 // Opções para a solicitação HTTPS
 const options = {
@@ -34,6 +39,11 @@ io.on('connection', (socket) => {
     socket.on('disconnect', () => {
         console.log('Client disconnected');
     });
+
+    // Lida com a solicitação de atualização dos dados
+    socket.on('requestCryptoData', () => {
+        fetchCryptoData(); // Chama a função para atualizar os dados
+    });
 });
 
 // Função para buscar e emitir os dados de preços de criptomoedas
@@ -51,12 +61,10 @@ const fetchCryptoData = () => {
 
                 // Extrai os símbolos e preços
                 const cryptoData = Object.values(response.data).map((coin) => ({
-                    symbol: coin.symbol,
+                    id: coin.id,
+                    name: coin.symbol,
                     price: coin.quote.USD.price
                 }));
-
-                console.log(cryptoData);
-
                 // Emite os dados para todos os clientes conectados
                 io.emit('crypto', cryptoData);
             } catch (error) {
@@ -67,5 +75,6 @@ const fetchCryptoData = () => {
         console.error('Erro na solicitação HTTPS:', error);
     }).end();
 };
+
 // Atualiza os preços a cada 5 segundos
-setInterval(fetchCryptoData, 5000);
+setInterval(fetchCryptoData, 1000);
